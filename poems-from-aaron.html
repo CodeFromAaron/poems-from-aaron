@@ -1,0 +1,584 @@
+<!DOCTYPE html><html><head><base href=""><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>poems_from_aaron</title>
+<link rel="icon" href="notepad-icon.ico" type="image/x-icon">
+<style>
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    background-color: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.notepad {
+    width: 80%;
+    height: 80%;
+    background-color: #2d2d2d;
+    border: 1px solid #555;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    resize: both;
+    overflow: auto;
+    min-width: 300px;
+    min-height: 200px;
+}
+.title-bar {
+    background: linear-gradient(to right, #3c3c3c, #2d2d2d);
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.title-bar-controls {
+    display: flex;
+}
+.title-bar-controls button {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    border: 1px solid #555;
+    background-color: transparent;
+    color: white;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.menu-bar {
+    background-color: #3c3c3c;
+    border-bottom: 1px solid #555;
+    padding: 2px 5px;
+    font-size: 12px;
+}
+.content {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.status-bar {
+    background-color: #3c3c3c;
+    border-top: 1px solid #555;
+    padding: 2px 5px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+.poem {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 10px;
+}
+.poem-title {
+    cursor: pointer;
+    user-select: none;
+}
+.poem-title:before {
+    content: '+ ';
+}
+.poem-title.open:before {
+    content: '- ';
+}
+.poem-content {
+    display: none;
+    white-space: pre-wrap;
+    margin-top: 5px;
+    padding-left: 15px;
+}
+.resize-handle {
+    cursor: se-resize;
+    font-size: 16px;
+    line-height: 12px;
+    visibility: hidden;
+}
+.copyright {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      padding: 10px;
+      font-size: 12px;
+      color: #666;
+    }
+</style></head><body>
+<div class="notepad">
+    <div class="title-bar">
+        <span>My Poetry Archive</span>
+        <div class="title-bar-controls">
+            <button>_</button>
+            <button>□</button>
+            <button>X</button>
+        </div>
+    </div>
+    <div class="menu-bar">
+        File  Edit  Format  View  Help
+    </div>
+    <div class="content" id="poetry-content">
+        Loading poems...
+    </div>
+    <div class="status-bar">
+        <span>Ln 1, Col 1</span>
+        <span>100%</span>
+        <span>Windows (CRLF)</span>
+        <span>UTF-8</span>
+        <span class="resize-handle">◢</span>
+    </div>
+</div>
+
+  <!-- Copyright notice -->
+  <div class="copyright">
+    &copy; 2024 Aaron Hamilton Gold. All rights reserved.
+  </div>
+
+<script>
+const poems = [
+    {
+        title: ">_READ ME",
+        content: `
+-----------------------
+
+Welcome to my Microsoft Notepad 
+poetry archive. Stay a while 
+and enjoy reading some poems 
+I've collected from my old hard 
+drive, along with a few new ones. 
+If you enjoy any of them, 
+feel free to let me know. :)
+
+-----------------------
+
+
+                                 
+`
+    },
+    {
+        title: "i saw the tv change - September 28th,  2024",
+        content: `
+-----------------------
+
+I’m going to be gone. On the other side of the screen. 
+~~__ ~~__~ <<
+
+It’s not comfortable, but it’s where I should be.
+My personhood is intact but flickering. 
+
+The channel is changing, and i’m tired of the person I was/am.
+My ‘eepy sighs anticipate the airing of a new series.
+I’m sorry I can't stay and watch or talk, but maybe one day 
+we’ll see one another through the static.
+
+Changed, new, and at ease 
+with what's on the 
+                next programme guide. <<
+
+
+                                 
+`
+    },
+    {
+        title: "dirt mound - January 28th,  2024",
+        content: `
+-----------------------
+
+There used to be a big mound of dirt here.
+
+We used to break into the construction site
+  and drink, and dance.
+
+There was a big mountain of dirt 
+covered in a tarp, taller than the fences 
+and the trees that blocked the sky. 
+
+If you climbed to the top you could see
+See the sunset over the city. It wasn't legal,
+But you could also see the bats migrate
+From the trees to the open air. Was pretty
+Sick.
+
+The concrete foundations would flood,
+Forcing the dirt and dust to compound into 
+a small muddy pond. The ibises would 
+peck at the water while perched on a 
+plastic office chair left right at the centre.
+
+A mound of dirt felt like it had more 
+character na the concrete left in its 
+place. A dirt mound is cooler than a park
+in my mind. 
+
+                                 
+`
+    },
+    {
+        title: "habour seal - December 30th,  2023",
+        content: `
+------------------------
+
+Like a harbour seal,
+trawled out at sea,
+I hope I always find 
+my way back each time. 
+
+To rest in the shallows, 
+where palm tree leaves 
+bend and we are at ease.
+
+I'll find us a rock, 
+let's sunbathe some more.
+                                 
+`
+    },
+    {
+        title: "i got a crush - May 7th,  2022",
+        content: `
+----------------------
+
+He's really cute, with curly hair,
+and he always sticks his tongue out in photos
+because he doesn't know what to do with himself.
+
+There's something satisfying about knowing
+he doesn't know. It's like I get to admire a new
+friend on a prospective level. You know?
+
+Each new item I learn makes me want to know more.
+It's not a hyper fixation, I can halt the thought.
+But when we get a chance to talk it's fun and 
+I want more.
+
+I'm not digging for any fools gold.
+This time I can let it be, knowing that
+I got
+     a
+       crush.
+
+          ...       ...
+        ..   ..   ..   ..
+      ..      ....       ..
+       .                 .
+        .               .
+          .            .
+            .        .
+              .     .
+                . .
+                 .      And
+                           who knows
+                              maybe
+                                he has
+                                 a crush on me.
+                                 
+`
+    },
+    {
+        title: "let go of control - May 2nd, 2022",
+        content: `
+--------------------------
+
+I'm learning to let go of control.
+All be it for the past four years I still manage to 
+  latch on to whatever I can, tightly.
+
+With knots in my shoulders that resemble calluses
+  made up of stringent muscle.
+It represents my harsh feelings towards circumstance.
+I won't let it go, even though its well with in
+my capabilities. I think my nature is persistent.
+
+I like that part of me. 
+I like how each arm claps around the ones I love.
+Till the knots and pressure produce warmth.
+
+Though I want to persist I risk creating heat
+and pressure. Causing rope burn on their back.
+
+I'm learning to let go of control,
+  I'm learning to let go.
+
+`
+    },
+    {
+        title: "on my way home - May 1st, 2022",
+        content: `
+-------------------------------
+
+On my walk home I stopped and crouched.
+Then I slid down into my legs and buried my face.
+
+I chose to speak to myself plainly. 
+I uttered what I had said when I was 16, 
+walking home from school heart broken because
+the boy I liked choose some else over me.
+Even though they liked me back, they choose someone else.
+
+  I said "I'm going to be alone for a long time, aren’t I?" 
+
+
+Now, this isn’t wrong. But now saying it at twenty two.
+It feels like a declaration of my patience.
+
+  Instead of a rebuke of love or my emotions.
+
+Rather an acknowledgement that these things take time.
+Love takes time. It took time to love myself.
+It took time for me to love people 
+  and for them to love me back.
+  Sometimes, that time never came back.
+
+Like some check-mate to my existential dread
+that I would be alone till it felt eternal.
+
+  Hahaha, I won the argument before it could begin.
+
+I will be alone for a while, I have been alone for while.
+In love I feel often times alone, because I am
+  yet to reach a point of terminal 
+                                  velocity. 
+
+I cant imagine the speed picking up anytime soon,
+and I cant imagine it slowing down.
+
+Today, at 2am. I now travel at a steady pace home.
+
+
+`
+    },
+    {
+        title: "shaving lotion - April 25th, 2022",
+        content: `
+---------------------------------
+
+Tomorrow I will shower, wash my hair, make my bed
+  and shave my beard. 
+
+Tomorrow I will wake up and wash away the sweat
+from my red and dry skin. I will scrub away the smell.
+
+The smell of a people will be gone, the memory
+wiped away. It is a clean slate, the thermostat 
+at a comfortable degree while I dry.
+
+The version of myself that betrayed me, and my comfort
+wont be there anymore. 
+
+  There will be no facial hair.
+
+  Because then I will be clean. 
+
+This body is mine again, I reclaimed it this morning. 
+A honest attempt at a self apology. 
+
+When I smile the attention is not at the jaw, outlined 
+by stubble and scruff. But the soft slope from my face 
+  to the nape of my neck.
+
+  Because, I am clean. 
+
+I can fold new sheets, make my bed. Lay and smile.
+Because I am more than the wretched smelling seams.
+
+The changes I have made, that added with the notes
+I have written. Will set me up for a clean slated day.
+
+I love myself 
+before the bath,
+       during,
+           and after.
+
+
+`
+    },
+    {
+        title: "day time dreaming - April 19th, 2022",
+        content: `
+-----------------------------------------
+
+I blinked twice, drafted a message in my head.
+It would read:
+
+  > Dude I miss you, I wish you'd talk to me
+    sent 4:18pm
+
+Day dreaming about if it had continued. 
+Locking myself in a fantasy. 
+
+	[try unlocking again in 30 seconds]
+
+Am I stunting myself by producing my day dreams
+from unfinished works.
+
+	[try unlocking again in 60 mins]
+
+He is an unwilling participant in my head.
+But the suffering is all mine. I can’t remember the last time 
+I had been so caught up. To my friends it seems
+  the same as the last. 
+
+But it is nothing like before, it’s this empty line in a
+final scene, the camera, the AD and the director 
+  waiting
+        to wrap it
+                  up.
+
+I cant stop these motions pictures in my drowsy mind.
+I dont want to stop, the feeling that more could be done.
+  That always more could be done.
+
+Can I send a message, can you not leave me. 
+Can I enter this day dream and lose myself in it
+and not come back later emotionally whipping myself.
+
+I am the script writer to my own demise. 
+I never liked working alone.
+
+  "we should be friends for now while we work on ourselves..."
+
+That's the line, that’s the cliff hanger? that'll keep me, us, hooked.
+Hurts, its hard to write anything worthwhile.
+
+Please, I wish you understood. That you're all my mind can conjure 
+  where nothing else would.  
+
+I want to stay in the dream forever. 
+  I shouldnt, but I am doing both. 
+
+
+
+`
+    },
+    {
+        title: "reading on my bed - April 18th",
+        content: `
+---------------------------------
+
+Today I read a whole article without losing focus.
+I sat on my bed and folded my computer in half.
+Perched it up on my knees, with the queer ramblings ready.
+
+I giggled, because it felt like having a large 
+picture book and as if I were a kid.
+
+Then I looked around for some recognition
+  or some respondent laughter.
+
+Often then not reading, for me in particular
+reading has been done in the company of loved ones.
+
+So I imagined what he would be like if he were sat in
+  the opposite corner of my room.
+
+I think he would watch me read and giggle to myself.
+While he practiced his guitar or twiddle his thumbs.
+  Maybe expect me to make a smooth romantic gesture.
+
+Before I passed on to the next article,
+I looked up once more to the vacant chair in my room.
+I whispered to my self "I miss him,
+  and I wonder what he's doing."
+
+I don't often read at all,
+  but I did it today. All by myself.
+
+
+
+`
+    },
+    {
+        title: "practicing gratitude - April 16th, 2022",
+        content: `
+---------------------------------------
+
+The time 00:05, she ran her hands through my hair and said 
+"I feel your gratitude all the time, you need to stop 
+worrying about other people feeling appreciated."
+
+I can see the Libra full moon from where I rest my head.
+ And I glanced back.
+
+She continued "We all feel your gratitude. I don’t think 
+there is a moment that passes when I'm with you that I
+think you act ungrateful. I think it's time you were more selfish. 
+ Do you get what I mean?". 
+
+"I understand, but-" champagne makes it hard for me to focus. 
+Keeping the rebuttal in,
+ because my friend was right. 
+
+I spent so much time winding up the cranks in my head, about 
+if I was being healthy, forcing myself through the hurt, 
+ asking "where is my gratitude."
+
+The time was 00:12, and she kept running her hands through my hair.
+I was silent, I was still grateful, I felt appreciated. 
+
+I allowed myself to feel, for the first time in a while,
+
+ gratitude in return.`
+    }
+];
+
+function displayPoems() {
+    const content = document.getElementById('poetry-content');
+    content.innerHTML = poems.map((poem, index) => 
+        `<div class="poem">
+            <div class="poem-title" onclick="togglePoem(${index})">${poem.title}</div>
+            <div class="poem-content" id="poem-${index}">${poem.content}</div>
+        </div>`
+    ).join('');
+}
+
+function togglePoem(index) {
+    const poems = document.querySelectorAll('.poem-content');
+    const titles = document.querySelectorAll('.poem-title');
+    
+    poems.forEach((poem, i) => {
+        if (i === index) {
+            poem.style.display = poem.style.display === 'block' ? 'none' : 'block';
+            titles[i].classList.toggle('open');
+        } else {
+            poem.style.display = 'none';
+            titles[i].classList.remove('open');
+        }
+    });
+}
+
+window.onload = function() {
+    displayPoems();
+    
+    const notepad = document.querySelector('.notepad');
+    const resizeHandle = document.querySelector('.resize-handle');
+    
+    let isResizing = false;
+    let lastDownX, lastDownY;
+    
+    resizeHandle.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        lastDownX = e.clientX;
+        lastDownY = e.clientY;
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        
+        const newWidth = notepad.offsetWidth + (e.clientX - lastDownX);
+        const newHeight = notepad.offsetHeight + (e.clientY - lastDownY);
+        
+        notepad.style.width = `${newWidth}px`;
+        notepad.style.height = `${newHeight}px`;
+        
+        lastDownX = e.clientX;
+        lastDownY = e.clientY;
+    });
+    
+    document.addEventListener('mouseup', () => {
+        isResizing = false;
+    });
+};
+</script>
+</body></html>
